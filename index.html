@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>jQuery选择器和选取方法</title>
+
+<link type="text/css" rel="stylesheet" href="./jQ_selector_selFunc_files/blog-common.css">
+<link id="MainCss" type="text/css" rel="stylesheet" href="./jQ_selector_selFunc_files/bundle-LessIsMore.css">
+<link id="mobile-style" href="./jQ_selector_selFunc_files/bundle-LessIsMore-mobile.css">
+
+</head>
+<body>
+
+
+	<div id="cnblogs_post_body">
+		<p>我们已经使用了带有简单Css选择器的jQuery选取函数:$()。现在是时候深入了解jQuery选择器语法，以及一些提取和扩充选中元素集的方法了。</p>
+		<h3>
+			<strong><span style="color: #ff0000;">一、jQuery选择器</span></strong>
+		</h3>
+		<p>在CSS3选择器标淮草案定义的选择器语法中，jQuery支持相当完整的一套子集，同时还添加了一些非标准但很有用的伪类。注意:本节讲述的是 jQuery选择器。其中有不少选择器(但不是全部)可以在CSS样式表中使用。选择器语法有三层结构。你肯定已经见过选择器中最简单的形式。”#te st”选取id属性为”test”的元素。”blockquote”选取文档中的所有&lt;blockquote&gt;元素，而”div.note” 则选取所有class属性为”note”的&lt;blockquote&gt;元素。简单选择器可以组合成“组合选择器”，比如 “div.note&gt;p”和“blockquote i”，只要用组合字符做分隔符就行。简单选择器和组合选择器还可以分组成逗号分隔的列表。这种选择器组是传递给$()函数最常见的形式。在解释组合选择器 和选择器组之前，我们必须先了解简单选择器的语法。</p>
+	<div>
+	<p>
+		<strong><span style="color: #0000ff;">1、简单选择器</span></strong>
+	</p>
+	<p>简单选择器的开头部分(显式或隐式地)是标签类型声明。例如，如果只对&lt;P&gt;元素感兴趣，简单选择器可以用“P”开头。如果选取的元素和标签名无关，则可以使用通配符“*”号来代替。如果选择器没有以标签名或通配符开头，则隐式含有一个通配符。</p>
+	<p>标签名或通配符指定了备选文档元素的一个初始集。在简单选择器中，标签类型声明之后的部分由零个或多个过滤器组成。过滤器从左到右应用，和书写顺序一致，其中每一个都会缩小选中元素集。下表列举了jQuery支持的过滤器。</p>
+
+	<table style="background: none repeat scroll 0% 0% #008080; color: yellow; width: 800px;" border="1px"> 
+		<tbody>
+			<tr>
+				<td style="text-align: center;" colspan="2" width="278" height="28">jQuery选择过滤器</td>
+			</tr>
+			<tr>
+			    <td style="text-align: center;" width="139" height="22">过滤器</td>
+			    <td width="580" height="22">含义</td>
+			</tr>
+			<tr>
+			    <td width="139" height="58">#id</td>
+			    <td width="580" height="58">匹配id属性为id的元素。在有效的}ITML文档中，永远不会出现多个元素拥有相同的ID，因此该过滤器通常作为独立选择器来使用</td>
+			</tr>
+			<tr>
+			    <td width="139" height="22">.class</td>
+			    <td width="580" height="22">匹配class属性(是一串被解析成用空格分隔的单词列表)含有class单词的所有元素</td>
+			</tr>
+			<tr>
+			    <td width="139" height="22">[attr]</td>
+			    <td width="580" height="22">匹配拥有attr属性(和值无关)的所有元素</td>
+			</tr>
+			<tr>
+			    <td width="139" height="22">[attr=val]</td>
+			    <td width="580" height="22">匹配拥有attr属性且值为val的所有元素</td>
+			</tr>
+			<tr>
+			    <td width="139" height="22">[attr!=val]</td>
+			    <td width="580" height="22">匹配没有attr属性、或attr属性的值不为val的所有元素((jQuery的扩展)</td>
+			</tr>
+			<tr>
+			    <td width="139" height="22">[attr^=val]</td>
+			    <td width="580" height="22">匹配attr属性值以val开头的元素</td>
+			</tr>
+			<tr>
+			    <td width="139" height="22">[attr$=val]</td>
+			    <td width="580" height="22">匹配attr属性值以val结尾的元素</td>
+			</tr>
+			<tr>
+			    <td width="139" height="22">[attr*=val]</td>
+			    <td width="580" height="22">匹配attr属性值含有val的元素</td>
+			</tr>
+			<tr>
+			    <td width="139" height="44">[attr~=val]</td>
+			    <td width="580" height="44">当其attr属性解释为一个由空格分隔的单词列表时，匹配其中包含单词val的元素。因此选择器“div.note”与“div&nbsp;[class~=note]”相同</td>
+			</tr>
+			<tr>
+			    <td width="139" height="22">[attr|=val]</td>
+			    <td width="580" height="22">匹配attr属性值以val开头且其后没有其他字符，或其他字符是以连字符开头的元素</td>
+			</tr>
+			<tr>
+			    <td width="139" height="22">:animated</td>
+			    <td width="580" height="22">匹配正在动画中的元素，该动画是由jQuery产生的</td>
+			</tr>
+			<tr>
+			    <td width="139" height="22">:button</td>
+			    <td width="580" height="22">匹配&lt;button&nbsp;type=”button”&gt;和&lt;input&nbsp;type=”button”&gt;元素(jQuery的扩展)</td>
+			</tr>
+			<tr>
+			    <td width="139" height="44">:checkbox</td>
+			    <td width="580" height="44">匹配&lt;input&nbsp;type=”checkbox”&gt;元素(&nbsp;jQuery的扩展)，当显式带有input标签前缀”input:checkbox”时，该过滤器更高效</td>
+			</tr>
+			<tr>
+			    <td width="139" height="22">:checked</td>
+			    <td width="580" height="22">匹配选中的input元素</td>
+			</tr>
+			<tr>
+			    <td width="139" height="66">:contains(text)</td>
+			    <td width="580" height="66">匹配含有指定text文本的元素(jQuery的扩展)。该过滤器中的圆括号确定了文本的范围—无须添加引号。被过滤的元素的文本是由textContent或innerText属性来决定的—这是原始文档文本，不带标签和注释</td>
+			</tr>
+			<tr>
+			    <td width="139" height="22">:disabled</td>
+			    <td width="580" height="22">匹配禁用的元素</td>
+			</tr>
+			<tr>
+			    <td width="139" height="22">:empty</td>
+			    <td width="580" height="22">匹配没有子节点、没有文本内容的元素</td>
+			</tr>
+			<tr>
+			    <td width="139" height="22">:enabled</td>
+			    <td width="580" height="22">匹配没有禁用的元素</td>
+			</tr>
+			<tr>
+			    <td width="139" height="22">:eq(n)</td>
+			    <td width="580" height="22">匹配基于文档顺序、序号从0开始的选中列表中的第n个元素(jQuery的扩展)</td>
+			</tr>
+			<tr>
+			    <td width="139" height="44">:even</td>
+			    <td width="580" height="44">匹配列表中偶数序号的元素。由于第一个元素的序号是0，因此实际上选中的是第1个、第3个、第5个等元素(jQuery的扩展)</td>
+			</tr>
+			<tr>
+			    <td width="139" height="22">:file</td>
+			    <td width="580" height="22">匹配&lt;input&nbsp;type=”file”&gt;元素(jQuery的扩展)</td>
+			</tr>
+			<tr>
+			    <td width="139" height="22">:first</td>
+			    <td width="580" height="22">匹配列表中的第一个元素。和“:eq(0)”相同(jQuery的扩展)</td>
+			</tr>
+			<tr>
+			    <td width="139" height="22">:first-child</td>
+			    <td width="580" height="22">匹配的元素是其父节点的第一个子元素。注意:这与“:first”不同</td>
+			</tr>
+			<tr>
+			    <td width="139" height="22">:gt(n)</td>
+			    <td width="580" height="22">匹配基于文档顺序、序号从0开始的选中列表中序号大于n的元素(&nbsp;jQuery的扩展)</td>
+			</tr>
+			<tr>
+			    <td width="139" height="22">:has(sel)</td>
+			    <td width="580" height="22">匹配的元素拥有匹配内嵌选择器sel的子孙元素</td>
+			</tr>
+			<tr>
+			    <td width="139" height="22">:header</td>
+			    <td width="580" height="22">匹配所有头元素:&lt;h1&gt;,&nbsp;&lt;h2&gt;,&nbsp;&lt;h3&gt;,&nbsp;&lt;h4&gt;,&nbsp;&lt;h5&gt;或&lt;h6&gt;&nbsp;(jQuery的扩展)</td>
+			</tr>
+			<tr>
+			    <td width="139" height="44">:hidden</td>
+			    <td width="580" height="44">匹配所有在屏幕上不可见的元素:大体上可以认为这些元素的offsetWidth和offsetHeight为0</td>
+			</tr>
+			<tr>
+			    <td width="139" height="44">:image</td>
+			    <td width="580" height="44">匹配&lt;input&nbsp;type=”image”&gt;元素。注意该过滤器不会匹配&lt;img&gt;元素(&nbsp;jQuery的扩展)</td>
+			</tr>
+			<tr>
+			    <td width="139" height="22">:input</td>
+			    <td width="580" height="22">匹配用户输入元素:&lt;input&gt;,&nbsp;&lt;textarea&gt;,&nbsp;&lt;select&gt;和&lt;button&gt;(&nbsp;jQuery的扩展)</td>
+			</tr>
+			<tr>
+			    <td width="139" height="22">:last</td>
+			    <td width="580" height="22">匹配选中列表中的最后一个元素((&nbsp;jQuery的扩展)</td>
+			</tr>
+			<tr>
+			    <td width="139" height="22">:last-child</td>
+			    <td width="580" height="22">匹配的元素是其父节点的最后一个子元素。注意:这与“:last”不同</td>
+			</tr>
+			<tr>
+			    <td width="139" height="22">:lt(n)</td>
+			    <td width="580" height="22">匹配基于文档顺序、序号从0开始的选中列表中序号小于n的元素(&nbsp;jQuery的扩展)</td>
+			</tr>
+			<tr>
+			    <td width="139" height="22">:not(sel)</td>
+			    <td width="580" height="22">匹配的元素不匹配内嵌选择器sel</td>
+			</tr>
+			<tr>
+			    <td width="139" height="22">:nth(n)</td>
+			    <td width="580" height="22">与“:eq(n)”相同(jQuery的扩展)</td>
+			</tr>
+			<tr>
+			    <td width="139" height="226">:nth-child(n)</td>
+			    <td width="580" height="226">匹配的元素是其父节点的第n个子元素。。可以是数值、单词even,单词odd或计算公式。 使用“:nth-child(even)”来选取那些在其父节点的子元素中排行第2或第4等序号的元素。使用“:nth-child(odd)”来选取那 些在其父节点的子元素中排行第1、第3等序号的元素。<br>
+			更常见的情况是，n是xn或x&nbsp;n+y这种计算公式，其中x和y是整数，n是字面量n。因此可以用nth-child(3n+1)来选取第1个、第4个、第7个等元素。<br>
+			注意该过滤器的序号是从1开始的，因此如果一个元素是其父节点的第一个子元素，会认为它是奇数元素，匹配的是3n+1，而不是3n。要和“:even以及“:odd”过滤器区分开来，后者匹配的序号是从0开始的。</td>
+			</tr>
+			<tr>
+			    <td width="139" height="44">:odd</td>
+			    <td width="580" height="44">匹配列表中奇数(从0开始)序号的元素。注意序号为1和3的元素分别是第2个和第4个匹配元素(&nbsp;jQuery的扩展)</td>
+			</tr>
+			<tr>
+			    <td width="139" height="22">:only-child</td>
+			    <td width="580" height="22">匹配那些是其父节点唯一子节点的元素</td>
+			</tr>
+			<tr>
+			    <td width="139" height="22">:parent</td>
+			    <td width="580" height="22">匹配是父节点的元素，这与“:empty”相反(jQuery的扩展)</td>
+			</tr>
+			<tr>
+			    <td width="139" height="22">:password</td>
+			    <td width="580" height="22">匹配&lt;input&nbsp;type=”password”&gt;元素(jQuery的扩展)</td>
+			</tr>
+			<tr>
+			    <td width="139" height="22">:radio</td>
+			    <td width="580" height="22">匹配&lt;input&nbsp;type=”radio”&gt;元素(&nbsp;j&nbsp;Query的扩展)</td>
+			</tr>
+			<tr>
+			    <td width="139" height="22">:reset</td>
+			    <td width="580" height="22">匹配&lt;input&nbsp;type=”reset”&gt;和&lt;button&nbsp;type=”reset”&gt;元素(jQuery的扩展)</td>
+			</tr>
+			<tr>
+			    <td width="139" height="44">:selected</td>
+			    <td width="580" height="44">匹配选中的&lt;option&gt;元素。使用“:checked”来选取选中的复选框和单选框(jQuery的扩展)</td>
+			</tr>
+			<tr>
+			    <td width="139" height="22">:submit</td>
+			    <td width="580" height="22">匹配&lt;input&nbsp;type=”submit”&gt;和&lt;button&nbsp;type=”submit”&gt;元素(jQuery的扩展)</td>
+			</tr>
+			<tr>
+			    <td width="139" height="22">:text</td>
+			    <td width="580" height="22">匹配&lt;input&nbsp;type=”text”&gt;元素(jQuery的扩展)</td>
+			</tr>
+			<tr>
+			    <td width="139" height="44">:visible</td>
+			    <td width="580" height="44">匹配所有当前可见的元素:大体上可以认为这些元素的offsetWidth和offsetHeight的值不为0，这和“:hidden”相反</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<p>注意:表中列举的部分选择器在圆括号中接受参数。例如，下面这个选择器选取的元素在其父节点的子元素中排行第1或第2等，只要它们含有“JavaScript”单词，就不包含元素。</p>
+	<p><strong>p:nth-child(3n+1): text (JavaScript):not(:has(a))</strong></p>
+	<p>通常来说，指定标签类型前缀，可以让过滤器的运行更高效。例如，不要简单使用”:radio”来选取单选框按钮，使用“input:radio”会
+	更好。ID过滤器是个例外，不添加标签前缀时它会更高效。例如，选择器“#address”通常比更明确的“form#address”更高效。</p>
+	<p>
+		<strong><span style="color: #0000ff;">2、组合选择器</span></strong>
+	</p>
+	<p style="text-align: left;">使用特殊操作符或“组合符”可以将简单选择器组合起来，表达文档树中元素之间的关系。下表列举了jQuery支持的组合选择器。这些组合选择器与CSS3支持的组合选择器是一样的。</p>
+	<p style="text-align: left;">下面是组合选择器的一些例子:</p>
+
+	<blockquote>
+		<div id="highlighter_842408" class="syntaxhighlighter  js">
+			<table border="0" cellspacing="0" cellpadding="0">
+				<tbody>
+					<tr>
+						<td class="gutter">
+							<div class="line number1 index0 alt2">1</div>
+							<div class="line number2 index1 alt1">2</div>
+							<div class="line number3 index2 alt2">3</div>
+							<div class="line number4 index3 alt1">4</div>
+						</td>
+						<td class="code">
+							<div class="container">
+								<div class="line number1 index0 alt2">
+									<code class="js string">"blockquote i"</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <code class="js comments">//匹配&lt;blockquote&gt;里的&lt;i&gt;元素</code>
+								</div>
+								<div class="line number2 index1 alt1">
+									<code class="js string">"ol &gt; li"</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <code class="js comments">//&lt;1i&gt;元素是&lt;of&gt;的直接子元素</code>
+								</div>
+								<div class="line number3 index2 alt2">
+									<code class="js string">"#output+*"</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <code class="js comments">//id="output"元素后面的兄弟元素</code>
+								</div>
+								<div class="line number4 index3 alt1">
+									<code class="js string">"div.note &gt; h1+p"</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <code class="js comments">//紧跟&lt;h1&gt;的&lt;P&gt;元素，在&lt;div class="note"&gt;里面</code>
+								</div>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</blockquote>
+
+	<p>注意组合选择器并不限于组合两个选择器:组合三个甚至更多选择器也是允许的。组合选择器从左到右处理。</p>
+	<p>
+		<strong><span style="color: #0000ff;">3、选择器组</span></strong>
+	</p>
+	<p>传递给$()函数(或在样式表中使用)的选择器就是选择器组，这是一个逗号分隔的列表，由一个或多个简单选择器或组合选择器构成。选择器组匹配的元
+	素只要匹配该选择器组中的任何一个选择器就行。对我们来说，一个简单选择器也可以认为是一个选择器组。下面是选择器组的一些例子:</p>
+
+	<blockquote>
+		<div id="highlighter_916987" class="syntaxhighlighter  js">
+			<table border="0" cellspacing="0" cellpadding="0">
+				<tbody>
+					<tr>
+						<td class="gutter">
+							<div class="line number1 index0 alt2">1</div>
+							<div class="line number2 index1 alt1">2</div>
+							<div class="line number3 index2 alt2">3</div>
+							<div class="line number4 index3 alt1">4</div>
+						</td>
+						<td class="code">
+							<div class="container">
+								<div class="line number1 index0 alt2">
+									<code class="js string">"h1, h2,h3"</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <code class="js comments">//匹配&lt;h1&gt;, &lt;h2&gt;和&lt;h3&gt;元素</code>
+								</div>
+								<div class="line number2 index1 alt1">	
+									<code class="js string">"#p1, #p2, #p3"</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <code class="js comments">//匹配id为p1, p2或p3的元素</code>
+								</div>
+								<div class="line number3 index2 alt2">
+									<code class="js string">"div.note, p.note"</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <code class="js comments">//匹配class="note"的&lt;div&gt;和&lt;P&gt;元素</code>
+								</div>
+								<div class="line number4 index3 alt1">
+									<code class="js string">"body&gt;p,div.note&gt;p"</code>&nbsp;&nbsp;&nbsp;&nbsp; <code class="js comments">//&lt;body&gt;和&lt;div class="note"&gt;的&lt;P&gt;子元素</code>
+								</div>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</blockquote>
+
+
+
+
+
+	<p>注意:CSS和jQuery选择器语法允许在简单选择器的某些过滤器中使用圆括号，但并不允许使用圆括号来进行更常见的分组。例如，不能把选择器组或组合选择器放在圆括号中并且当成简单选择器:</p>
+<blockquote>
+<div>
+<div id="highlighter_789380" class="syntaxhighlighter  js">
+<table border="0" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="gutter">
+<div class="line number1 index0 alt2">1</div>
+<div class="line number2 index1 alt1">2</div>
+
+</td>
+<td class="code">
+<div class="container">
+<div class="line number1 index0 alt2"><code class="js plain">(h1, h2, h3)+p&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </code><code class="js comments">//非法</code></div>
+<div class="line number2 index1 alt1"><code class="js plain">h1+p, h2+p, h3+p&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </code><code class="js comments">//正确的写法</code></div>
+
+</div>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+</blockquote>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h3>　　<strong><span style="color: #ff0000;">二、选取方法</span></strong></h3>
+<p>除了$()函数支持的选择器语法，jQuery还定义了一些选取方法。本章中我们已看到过的大部分jQuery方法都是在选中元素上执行某种操作。选取方法不一样:它们会修改选中元素集，对其进行提取、扩充或仅作为新选取操作的起点。</p>
+<p>本节描述这些选取方法。你会注意到这些选取方法中的多数提供的功能与选择器语法的功能是一样的。</p>
+<p>提取选中元素最简单的方式是按位置提取。first()返回的jQuery对象仅包含选中元素中的第一个，last()返回的jQuery对象则只
+包含最后一个元素。更通用的是，eq()方法返回物Query对象只包含指定序号的单个选中元素。(在jQuery 
+1.4中，负序号也是允许的，会从选区的末尾开始计数。)注意这些方法返回的jQuery对象只含有一个元素。这与常见的数组序号是不一样的，数组序号返
+回的单一元素没有经过jQuery包装:</p>
+<blockquote>
+<div>
+<div id="highlighter_723756" class="syntaxhighlighter  js">
+<table border="0" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="gutter">
+<div class="line number1 index0 alt2">1</div>
+<div class="line number2 index1 alt1">2</div>
+<div class="line number3 index2 alt2">3</div>
+<div class="line number4 index3 alt1">4</div>
+<div class="line number5 index4 alt2">5</div>
+<div class="line number6 index5 alt1">6</div>
+
+</td>
+<td class="code">
+<div class="container">
+<div class="line number1 index0 alt2"><code class="js keyword">var</code> <code class="js plain">paras=$(</code><code class="js string">"p"</code><code class="js plain">);</code></div>
+<div class="line number2 index1 alt1"><code class="js plain">paras.first()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </code><code class="js comments">//仅选取第一个&lt;p&gt;元素</code></div>
+<div class="line number3 index2 alt2"><code class="js plain">paras.last()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </code><code class="js comments">//仅选取最后一个&lt;P&gt;</code></div>
+<div class="line number4 index3 alt1"><code class="js plain">paras.eq(1)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </code><code class="js comments">//选取第二个&lt;P&gt;</code></div>
+<div class="line number5 index4 alt2"><code class="js plain">paras.eq(-2)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </code><code class="js comments">//选取倒数第二个&lt;P&gt;</code></div>
+<div class="line number6 index5 alt1"><code class="js plain">paras[1]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </code><code class="js comments">//第二个&lt;P&gt;元素自身</code></div>
+
+</div>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+</blockquote>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<p>通过位置提取选区更通用的方法是slice()o 
+jQuery的slice()方法与Array.slice()方法类似:前者接受开始和结束序号(负序号会从结尾处计算)，返回的jQuery对象包含
+从开始到结束序号(但不包含结束序号)处的元素集。如果省略结束序号，返回的对象会包含从开始序号起的所有元素:</p>
+<blockquote>
+<div>
+<div id="highlighter_469430" class="syntaxhighlighter  js">
+<table border="0" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="gutter">
+<div class="line number1 index0 alt2">1</div>
+<div class="line number2 index1 alt1">2</div>
+
+</td>
+<td class="code">
+<div class="container">
+<div class="line number1 index0 alt2"><code class="js plain">$(</code><code class="js string">"p"</code><code class="js plain">).slice(2,5)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </code><code class="js comments">//选取第3个、第4个和第5个&lt;P&gt;元素</code></div>
+<div class="line number2 index1 alt1"><code class="js plain">$(</code><code class="js string">"div"</code><code class="js plain">).slice(-3)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </code><code class="js comments">//选取最后3个&lt;div&gt;元素</code></div>
+
+</div>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+</blockquote>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<p>filter()是通用的选区过滤方法，有3种调用方式:</p>
+<blockquote>
+
+<ol>
+<li>　　传递选择器字符串给filter()，它会返回一}jQuery对象，仅包含也匹配该选择器的选中元素。</li>
+<li>　　传递另一个jQuery对象给filter()，它会返回一个新的jQuery对象，该对象包含这两们Query对象的交集。也可以传递元素数组甚至单一文档元素给filter()。</li>
+<li>　　传递判断函数给filter()，会为每一个匹配元素调用该函数，filter()则返回一个jQuery对象，仅包含判断函数为true(或任意真值)的元素。在调用判断函数时，this值为当前元素，参数是元素序号。
+<div>
+<div id="highlighter_170383" class="syntaxhighlighter  js">
+<table border="0" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="gutter">
+<div class="line number1 index0 alt2">1</div>
+<div class="line number2 index1 alt1">2</div>
+<div class="line number3 index2 alt2">3</div>
+
+</td>
+<td class="code">
+<div class="container">
+<div class="line number1 index0 alt2"><code class="js plain">$(</code><code class="js string">"div"</code><code class="js plain">).filter(</code><code class="js string">".note"</code><code class="js plain">)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </code><code class="js comments">//与$("div.note")一样</code></div>
+<div class="line number2 index1 alt1"><code class="js plain">$(</code><code class="js string">"div"</code><code class="js plain">).filter($(</code><code class="js string">".note"</code><code class="js plain">))&nbsp;&nbsp;&nbsp;&nbsp; </code><code class="js comments">//与$("div.note")一样</code></div>
+<div class="line number3 index2 alt2"><code class="js plain">$(</code><code class="js string">"div"</code><code class="js plain">).filter(</code><code class="js keyword">function</code><code class="js plain">(idx){</code><code class="js keyword">return</code> <code class="js plain">idx%2 == 0})&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </code><code class="js comments">//与$("div:even")一样</code></div>
+
+</div>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+</li>
+
+</ol>
+</blockquote>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<p>not()方法与filter()一样，除了含义与filter()相反。如果传递选择器字符串给not()它会返回一个新的jQuery对象，该
+对象只包含不匹配该选择器的元素。如果传递jQuery对象、元素数组或单一元素给not()，它会返回除了显式排除的元素之外的所有选中元素。如果传递
+判断函数给not()，该判断函数的调用就与在filter()中一样，只是返回的jQuery对象仅包含那些使得判断函数返回false或其他假值的元
+素:</p>
+<div>
+<div id="highlighter_465312" class="syntaxhighlighter  js">
+<table border="0" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="gutter">
+<div class="line number1 index0 alt2">1</div>
+
+</td>
+<td class="code">
+<div class="container">
+<div class="line number1 index0 alt2"><code class="js plain">$(</code><code class="js string">"div"</code><code class="js plain">).not(</code><code class="js string">"#header, #footer"</code><code class="js plain">);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </code><code class="js comments">//除了两个特殊元素之外的所有元素</code></div>
+
+</div>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+<div>
+<p>　　在jQuery 1.4中，提取选区的另一种方式是has()方法。如果传入选择器，has()会返回一个新的jQuery对象，仅包含有子孙元素匹配该选择器的选中元素。如果传入文档元素给has()，它会将选中元素集调整为那些是指定元素祖先节点的选中元素:</p>
+<div>
+<div id="highlighter_274007" class="syntaxhighlighter  js">
+<table border="0" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="gutter">
+<div class="line number1 index0 alt2">1</div>
+
+</td>
+<td class="code">
+<div class="container">
+<div class="line number1 index0 alt2"><code class="js plain">$(</code><code class="js string">"p"</code><code class="js plain">).has(</code><code class="js string">"a[href]"</code><code class="js plain">)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </code><code class="js comments">//包含链接的段落</code></div>
+
+</div>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+<p>add()方法会扩充选区，而不是对其进行过滤或提取。可以将传给$()函数的任何参数(除了函数)照样传给add()方法。add()方法会返回
+原来的选中元素，加上传给$()函数的那些参数所选中(或创建)的那些元素。add()会移除重复元素，并对该组合选区进行排序，以便里面的元素按照文档
+中的顺序排列:</p>
+<blockquote>
+<div>
+<div id="highlighter_322481" class="syntaxhighlighter  js">
+<table border="0" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="gutter">
+<div class="line number1 index0 alt2">1</div>
+<div class="line number2 index1 alt1">2</div>
+<div class="line number3 index2 alt2">3</div>
+<div class="line number4 index3 alt1">4</div>
+<div class="line number5 index4 alt2">5</div>
+<div class="line number6 index5 alt1">6</div>
+
+</td>
+<td class="code">
+<div class="container">
+<div class="line number1 index0 alt2"><code class="js comments">//选取所有&lt;div&gt;和所有&lt;P&gt;元素的等价方式</code></div>
+<div class="line number2 index1 alt1"><code class="js plain">$(</code><code class="js string">"div, p"</code><code class="js plain">)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </code><code class="js comments">//使用选择器组</code></div>
+<div class="line number3 index2 alt2"><code class="js plain">$(</code><code class="js string">"div"</code><code class="js plain">).add(p)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </code><code class="js comments">//给add()传入选择器</code></div>
+<div class="line number4 index3 alt1"><code class="js plain">$(</code><code class="js string">"div"</code><code class="js plain">).add($(</code><code class="js string">"p"</code><code class="js plain">))&nbsp;&nbsp;&nbsp; </code><code class="js comments">//给add()传入jQuery对象</code></div>
+<div class="line number5 index4 alt2"><code class="js keyword">var</code> <code class="js plain">paras = document.getElementsByTagName(</code><code class="js string">"p"</code><code class="js plain">);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </code><code class="js comments">//类数组对象</code></div>
+<div class="line number6 index5 alt1"><code class="js plain">$(</code><code class="js string">"div"</code><code class="js plain">).add(paras);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </code><code class="js comments">//给add()传入元素数组</code></div>
+
+</div>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+</blockquote>
+<p><strong><span style="color: #0000ff;">1.将选中元素集用做上下文</span></strong></p>
+<p>上面描述的filter(). 
+add()、和not()方法会在各自的选中元素集上执行交集、并集和差集运算。jQuery还定义一些其他选取方法可将当前选中元素集作为上下文来使
+用。对选中的每一个元素，这些方法会使用该选中元素作为上下文或起始点来得到新的选中元素集，然后返回一个新的jQuery对象，包含所有新的选中元素的
+并集。与add()方法类似，会移除重复元素并进行排序，以便元素会按照在文档中出现的顺序排列好。</p>
+<p>该类别选取方法中最通用的是find()。它会在每一个当前选中元素的子孙元素中寻找与指定选择器字符串匹配的元素，然后它返回一个新的
+jQuery对象来代表所匹配的子孙元素集。注意这些新选中的元素不会并入已存在的选中元素集中。同时注意find()和filter()不
+同，filter()不会选中新元素，只是简单地将当前选中的元素集进行缩减:</p>
+<div>
+<div id="highlighter_501491" class="syntaxhighlighter  js">
+<table border="0" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="gutter">
+<div class="line number1 index0 alt2">1</div>
+
+</td>
+<td class="code">
+<div class="container">
+<div class="line number1 index0 alt2"><code class="js plain">$(</code><code class="js string">"div"</code><code class="js plain">).find(</code><code class="js string">"p"</code><code class="js plain">)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </code><code class="js comments">//在中查找元素，与$("div p")相同</code></div>
+
+</div>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+<p>该类别中的其他方法返回新的jQuery对象，代表当前选中元素集中每一个元素的子元素、兄弟元素或父元素。大部分都接受可选的选择器字符串作为参数。不传入选择器时，它们会返回所有子元素、兄弟元素或父元素。传入选择器时，它们会过滤元素集，仅返回匹配的。</p>
+<p>children()方法返回每一个选中元素的直接子元素，可以用可选的选择器参数进行过滤:</p>
+<blockquote>
+<div>
+<div id="highlighter_481511" class="syntaxhighlighter  js">
+<table border="0" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="gutter">
+<div class="line number1 index0 alt2">1</div>
+<div class="line number2 index1 alt1">2</div>
+<div class="line number3 index2 alt2">3</div>
+
+</td>
+<td class="code">
+<div class="container">
+<div class="line number1 index0 alt2"><code class="js comments">//寻找id为"header"和"footer"元素的子节点元素中的所有&lt;span&gt;元素</code></div>
+<div class="line number2 index1 alt1"><code class="js comments">//与$("#header&gt;span, #footer&gt;span")相同</code></div>
+<div class="line number3 index2 alt2"><code class="js plain">$(</code><code class="js string">"#header, #footer"</code><code class="js plain">).children(</code><code class="js string">"span"</code><code class="js plain">)</code></div>
+
+</div>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+</blockquote>
+
+
+</div>
+
+
+</div>
+
+
+
+<p>contents()方法与children()方法类似，不同的是它会返回每一个元素的所有子节点，包括文本节点。如果选中元素集中
+有&lt;iframe&gt;元素，contents()还会返回该&lt;iframe&gt;内容的文档对象。注意contents()不接受可选
+的选择器字符串参数—因为它返回的文档节点不完全是元素，而选择器字符串仅用来描述元素节点。<br>
+next()和prev()方法返回每一个选中元素的下一个和上一个兄弟元素(如果有的话)。如果传入了选择器，会只选中匹配该选择器的兄弟元素:</p>
+<blockquote>
+<div>
+<div id="highlighter_364150" class="syntaxhighlighter  js">
+<table border="0" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="gutter">
+<div class="line number1 index0 alt2">1</div>
+<div class="line number2 index1 alt1">2</div>
+
+</td>
+<td class="code">
+<div class="container">
+<div class="line number1 index0 alt2"><code class="js plain">$(</code><code class="js string">"h1"</code><code class="js plain">).next(</code><code class="js string">"p"</code><code class="js plain">)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </code><code class="js comments">//与$("h1+p")相同</code></div>
+<div class="line number2 index1 alt1"><code class="js plain">$(</code><code class="js string">"h1"</code><code class="js plain">).prev()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </code><code class="js comments">//&lt;h1&gt;元素前面的兄弟元素</code></div>
+
+</div>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+</blockquote>
+
+
+
+
+<p>nextAll()和prevAll()返回每一个选中元素前面或后面的所有兄弟元素(如果有的话)。siblings()方法则返回每一个选中元素的所有兄弟元素(选中元素本身不是自己的兄弟元素)。如果给这些方法传人选择器，则只会返回匹配的兄弟元素:</p>
+<blockquote>
+<div>
+<div id="highlighter_667585" class="syntaxhighlighter  js">
+<table border="0" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="gutter">
+<div class="line number1 index0 alt2">1</div>
+<div class="line number2 index1 alt1">2</div>
+
+</td>
+<td class="code">
+<div class="container">
+<div class="line number1 index0 alt2"><code class="js plain">$(</code><code class="js string">"#footer"</code><code class="js plain">).nextAll(</code><code class="js string">"p"</code><code class="js plain">)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </code><code class="js comments">//紧跟#footer元素的所有&lt;P&gt;兄弟元素</code></div>
+<div class="line number2 index1 alt1"><code class="js plain">$(</code><code class="js string">"#footer"</code><code class="js plain">).prevAll()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </code><code class="js comments">//#footer元素前面的所有兄弟元素</code></div>
+
+</div>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+</blockquote>
+<p>从jQuery 
+1.4开始，nextUntil()和prevUntil()方法接受一个选择器参数，会选取选中元素后面或前面的所有兄弟元素，直到找到某个匹配该选择
+器的兄弟元素为止。如果省略该选择器，这两个方法的作用就和不带选择器的nextAll()和prevAll()一样。</p>
+<p>parent()方法返回每一个选中元素的父节点:</p>
+<div>
+<div id="highlighter_966862" class="syntaxhighlighter  js">
+<table border="0" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="gutter">
+<div class="line number1 index0 alt2">1</div>
+
+</td>
+<td class="code">
+<div class="container">
+<div class="line number1 index0 alt2"><code class="js plain">$(</code><code class="js string">"li"</code><code class="js plain">).parent()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </code><code class="js comments">//列表元素的父节点，比如&lt;u1&gt;和&lt;ol&gt;元素</code></div>
+
+</div>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+<p>parents()方法返回每一个选中元素的祖先节点(向上直到元素)。parent()和parents()都接受一个可选的选择器字符串参数:</p>
+<div>
+<div id="highlighter_303561" class="syntaxhighlighter  js">
+<table border="0" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="gutter">
+<div class="line number1 index0 alt2">1</div>
+
+</td>
+<td class="code">
+<div class="container">
+<div class="line number1 index0 alt2"><code class="js plain">$(</code><code class="js string">"a[href]"</code><code class="js plain">).parents(</code><code class="js string">"p"</code><code class="js plain">)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </code><code class="js comments">//含有链接的&lt;P&gt;元素</code></div>
+
+</div>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+<p>parentsUntil()返回每一个选中元素的祖先元素，直到出现匹配指定选择器的第一个祖先元素。closest()方法必须传人一个选择器
+字符串，会返回每一个选中元素的祖先元素中匹配该选择器的最近一个祖先元素(如果有的话)。对该方法而言，元素被认为是自身的祖先元素。在jQuery 
+1.4中，还可以给closest()传入一个祖先元素作为第二个参数，用来阻止jQuery往上查找时超越该指定元素:</p>
+<blockquote>
+<div>
+<div id="highlighter_723750" class="syntaxhighlighter  js">
+<table border="0" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="gutter">
+<div class="line number1 index0 alt2">1</div>
+<div class="line number2 index1 alt1">2</div>
+
+</td>
+<td class="code">
+<div class="container">
+<div class="line number1 index0 alt2"><code class="js plain">$(</code><code class="js string">"a[href]"</code><code class="js plain">).closest(</code><code class="js string">"div"</code><code class="js plain">)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </code><code class="js comments">//包含链接的最里层&lt;div&gt;</code></div>
+<div class="line number2 index1 alt1"><code class="js plain">$(</code><code class="js string">"a[href]"</code><code class="js plain">).parentsUntil(</code><code class="js string">":not(div)"</code><code class="js plain">)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </code><code class="js comments">//所有包裹&lt;a&gt;的&lt;div&gt;元素</code></div>
+
+</div>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+</blockquote>
+<p><strong><span style="color: #0000ff;">2、恢复到之前的选中元素集</span></strong></p>
+<p>为了实现方法的链式调用，很多jQuery对象的方法最后都会返回调用对象。然而本节讲述的方法都返回新的jQuery对象。可以链式调用下去，但必须清晰地意识到，在链式调用的后面所操作的元素集，可能已经不是该链式调用开始时的元素集了。</p>
+<p>实际情况还要复杂些。当这里所描述的选取方法在创建或返回一个新的ejQuery对象时，它们会给该对象添加一个到它派生自的旧jQuery对象的
+内部引用。这会创建一个jQuery对象的链式表或栈。end()方法用来弹出栈，返回保存的jQuery对象。在链式调用中调用end()会将匹配元素
+集还原到之前的状态。考虑以下代码:</p>
+<blockquote>
+<div>
+<div id="highlighter_950519" class="syntaxhighlighter  js">
+<table border="0" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="gutter">
+<div class="line number1 index0 alt2">1</div>
+<div class="line number2 index1 alt1">2</div>
+<div class="line number3 index2 alt2">3</div>
+<div class="line number4 index3 alt1">4</div>
+<div class="line number5 index4 alt2">5</div>
+<div class="line number6 index5 alt1">6</div>
+<div class="line number7 index6 alt2">7</div>
+<div class="line number8 index7 alt1">8</div>
+<div class="line number9 index8 alt2">9</div>
+<div class="line number10 index9 alt1">10</div>
+<div class="line number11 index10 alt2">11</div>
+<div class="line number12 index11 alt1">12</div>
+
+</td>
+<td class="code">
+<div class="container">
+<div class="line number1 index0 alt2"><code class="js comments">//寻找所有&lt;div&gt;元素，然后在其中寻找&lt;P&gt;元素</code></div>
+<div class="line number2 index1 alt1"><code class="js comments">//高亮显示&lt;P&gt;元素，然后给&lt;div&gt;元素添加一个边框</code></div>
+<div class="line number3 index2 alt2"><code class="js comments">//首先，不使用链式调用</code></div>
+<div class="line number4 index3 alt1"><code class="js keyword">var</code> <code class="js plain">divs = $(</code><code class="js string">"div"</code><code class="js plain">);</code></div>
+<div class="line number5 index4 alt2"><code class="js keyword">var</code> <code class="js plain">paras = div.find(</code><code class="js string">"p"</code><code class="js plain">);</code></div>
+<div class="line number6 index5 alt1"><code class="js plain">paras.addClass(</code><code class="js string">"highlight"</code><code class="js plain">);</code></div>
+<div class="line number7 index6 alt2"><code class="js plain">divs.css(</code><code class="js string">"border"</code><code class="js plain">, </code><code class="js string">"solid black 1px"</code><code class="js plain">);</code></div>
+<div class="line number8 index7 alt1">&nbsp;</div>
+<div class="line number9 index8 alt2"><code class="js comments">//下面展现如何使用链式调用来实现</code></div>
+<div class="line number10 index9 alt1"><code class="js plain">$(</code><code class="js string">"div"</code><code class="js plain">).find(</code><code class="js string">"p"</code><code class="js plain">).addClass(</code><code class="js string">"highlight"</code><code class="js plain">).end().css(</code><code class="js string">"border"</code><code class="js plain">, </code><code class="js string">"solid black 1px"</code><code class="js plain">);</code></div>
+<div class="line number11 index10 alt2"><code class="js comments">//还可以将操作调换顺序来避免调用end()</code></div>
+<div class="line number12 index11 alt1"><code class="js plain">$(</code><code class="js string">"div"</code><code class="js plain">).css(</code><code class="js string">"border"</code><code class="js plain">, </code><code class="js string">"solid block 1px"</code><code class="js plain">).find(</code><code class="js string">"p"</code><code class="js plain">).addClass(</code><code class="js string">"highlight"</code><code class="js plain">);</code></div>
+
+</div>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+</blockquote>
+<p>如果想手动定义选中元素集，同时保持与end()方法的兼容，可以将新的元素集作为数组或类数组对象传递给push5tack()方法。指定的元素会成为新的选中元素，之前选中的元素集则会压入栈中，之后可以用end()方法还原它们:</p>
+<blockquote>
+<div>
+<div id="highlighter_156334" class="syntaxhighlighter  js">
+<table border="0" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="gutter">
+<div class="line number1 index0 alt2">1</div>
+<div class="line number2 index1 alt1">2</div>
+<div class="line number3 index2 alt2">3</div>
+
+</td>
+<td class="code">
+<div class="container">
+<div class="line number1 index0 alt2"><code class="js keyword">var</code> <code class="js plain">sel = $(</code><code class="js string">"div"</code><code class="js plain">);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </code><code class="js comments">//选取所有&lt;div&gt;元素</code></div>
+<div class="line number2 index1 alt1"><code class="js plain">sel.pushStack(document.getElementsByTagName(</code><code class="js string">"p"</code><code class="js plain">));&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </code><code class="js comments">//修改为所有&lt;P&gt;元素</code></div>
+<div class="line number3 index2 alt2"><code class="js plain">sel.end();&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </code><code class="js comments">//还原为&lt;div&gt;元素</code></div>
+
+</div>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+</blockquote>
+<p>既然我们已经讲解了end()方法及其使用的选区栈，就有最后一个方法需要讲解。andSelf()返回一个新的jQuery对象，包含当前的所有
+选中元素，加上之前的所有选中元素(会去除重复的)。andSelf()和add()方法一样，或许“addPrev”是一个更具描述性的名字。作为例
+子，考虑上面代码的下述变化:高亮显示&lt;P&gt;元素及其父节点中的&lt;div&gt;元素，然后给这些&lt;div&gt;元素添加边
+框:</p>
+<p>
+</p>
+<table border="0" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="gutter">
+<div class="line number1 index0 alt2">1</div>
+<div class="line number2 index1 alt1">2</div>
+<div class="line number3 index2 alt2">3</div>
+<div class="line number4 index3 alt1">4</div>
+
+</td>
+<td class="code">
+<div class="container">
+<div class="line number1 index0 alt2"><code class="js plain">$(</code><code class="js string">"div"</code><code class="js plain">).find(</code><code class="js string">"p"</code><code class="js plain">).andSelf().&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </code><code class="js comments">//寻找&lt;div》中的&lt;P&gt;，合并起来</code></div>
+<div class="line number2 index1 alt1"><code class="js plain">addClass(</code><code class="js string">"highlight"</code><code class="js plain">).&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </code><code class="js comments">//都高亮</code></div>
+<div class="line number3 index2 alt2"><code class="js plain">end().end().&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </code><code class="js comments">//弹出栈两次，返回$("div")</code></div>
+<div class="line number4 index3 alt1"><code class="js plain">css(</code><code class="js string">"border"</code><code class="js plain">, </code><code class="js string">"solid black 1px"</code><code class="js plain">);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </code><code class="js comments">//给divs添加边框</code></div>
+
+</div>
+
+</td>
+
+</tr>
+
+</tbody>
+</table>
+
+
+
+
+</body>
+</html>
