@@ -1,3 +1,3 @@
 # jquery_selector
 
-jQuery选择器和选取方法
+jQuery閫夋嫨鍣ㄥ拰閫夊彇鏂规硶
